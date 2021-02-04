@@ -59,8 +59,6 @@ int main(){
 
         distancia = sqrt(pow(colisaox,2) + pow(colisaoy, 2));
 
-        printf("%i\n", distancia);
-
         if(distancia < 175){
             pontox = GetRandomValue(0, 800);
             pontoy = GetRandomValue(0, 450);
