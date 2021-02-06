@@ -78,3 +78,88 @@ int main(){
  return 0;
 }
 ```
+
+### tesntando um algoritmo de colisao com circulos
+
+```c
+#include <stdio.h>
+#include <math.h>
+#include "raylib.h"
+
+//teste de colisao
+bool colisao(int* x1, int* x2, int* y1, int* y2){
+    int distancia = sqrt(pow(*x1-*x2, 2) + pow(*y1-*y2, 2));
+    if(distancia <= 60){
+        return 1;
+    }else{
+        return 0;
+    }
+}
+
+int main(){
+    srand(time(NULL));
+    int const ScreenWidth = 800, ScreenHeight = 450;
+    //inicializo os pontos
+    int x1 = 300, x2 = 400, y1 = 225, y2 = 225;
+    //inicializo as variaveis de distancia
+    int dx = x1 - x2, dy = y1 - y2;
+    //inicializo as variaveis de previsao de distancia
+    int prevx1 = x1+10, prevx2 = x2+10, prevy1 = y1+10, prevy2 = y2+10;
+
+    InitWindow(ScreenWidth, ScreenHeight, "Colisao");
+
+    SetTargetFPS(60);
+
+    while(!WindowShouldClose()){
+        dx = x1 - x2;
+        dx = y1 - y2;
+        //condicionais de colisao extremamente mal otimizado
+        if(!colisao(&x1, &x2, &y1, &y2)){
+            if(IsKeyPressed(KEY_UP)) y1 -= 10;
+            else if(IsKeyPressed(KEY_DOWN))y1 += 10;
+            else if(IsKeyPressed(KEY_RIGHT))x1 += 10;
+            else if(IsKeyPressed(KEY_LEFT))x1 -= 10;
+        }else{
+           if(x1 > x2 && y1 == y2){
+                if(IsKeyPressed(KEY_UP)) y1 -= 10;
+                else if(IsKeyPressed(KEY_DOWN)) y1 += 10;
+                else if(IsKeyPressed(KEY_RIGHT)) x1 += 10;
+           }else if(x1 < x2 && y1 == y2){
+                if(IsKeyPressed(KEY_UP)) y1 -= 10;
+                else if(IsKeyPressed(KEY_DOWN)) y1 += 10;
+                else if(IsKeyPressed(KEY_LEFT)) x1 -= 10;
+           }else if(x1 == x2 && y1 > y2-70){
+                if(IsKeyPressed(KEY_DOWN)) y1 -= 10;
+                else if(IsKeyPressed(KEY_RIGHT)) x1 += 10;
+                else if(IsKeyPressed(KEY_LEFT)) x1 -= 10;
+           }else if(x1 == x2 && y1+60 < y2){
+                if(IsKeyPressed(KEY_DOWN)) y1 += 10;
+                else if(IsKeyPressed(KEY_RIGHT)) x1 += 10;
+                else if(IsKeyPressed(KEY_LEFT)) x1 -= 10;
+           }else if(x1 < x2 && y1 > y2-35){
+                if(IsKeyPressed(KEY_UP)) y1 -= 10;
+                else if(IsKeyPressed(KEY_LEFT)) x1 -= 10;
+           }else if(x1 < x2 && y1 < y2){
+                if(IsKeyPressed(KEY_DOWN)) y1 += 10;
+                else if(IsKeyPressed(KEY_LEFT)) x1 -= 10;
+           }else if(x1 > x2 && y1 > y2-35){
+                if(IsKeyPressed(KEY_UP)) y1 -= 10;
+                else if(IsKeyPressed(KEY_RIGHT)) x1 += 10;
+           }else if(x1 > x2 <= 60 && y1 < y2){
+                if(IsKeyPressed(KEY_DOWN)) y1 += 10;
+                else if(IsKeyPressed(KEY_RIGHT)) x1 += 10;
+           }
+        }
+        BeginDrawing();
+            ClearBackground(RAYWHITE);
+
+            DrawCircle(x1, y1, 30, RED);
+            DrawCircle(x2, y2, 30, BLUE);
+
+        EndDrawing();
+        printf("%i, %i, %i, %i, %i, %i\n", x1 - x2, y1 - y2, x1, x2, y1, y2);
+    }
+
+return 0;
+}
+```
