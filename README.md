@@ -163,3 +163,62 @@ int main(){
 return 0;
 }
 ```
+
+### Teste de "tiro"
+
+```c
+#include "raylib.h"
+
+void tiro(int* posx, int* posy){
+   return DrawRectangle(posx, posy, 10, 10, RED);
+}
+
+int velocidade(int* posx){
+    return posx+7;
+}
+
+
+
+int main(){
+    int const ScreenWidth = 800, ScreenHeight = 450;
+
+    InitWindow(ScreenWidth, ScreenHeight, "Teste de tiros");
+
+    int x = ScreenWidth/2 , y = ScreenHeight/2, posx = (ScreenWidth/2)+100, posy = (ScreenHeight/2)+50;
+
+    bool tiro = 0;
+    int vel = 7;
+
+    SetTargetFPS(60);
+
+    while(!WindowShouldClose()){
+
+    if(IsKeyDown(KEY_UP))y -= 5;
+    else if(IsKeyDown(KEY_DOWN))y += 5;
+    else if(IsKeyDown(KEY_RIGHT))x += 5;
+    else if(IsKeyDown(KEY_LEFT))x -= 5;
+
+    if(IsKeyPressed(KEY_SPACE)){
+        tiro = 1;
+    }
+
+    BeginDrawing();
+    ClearBackground(RAYWHITE);
+
+        DrawRectangle(x, y, 100, 100, PURPLE);
+        if(tiro)DrawRectangle(posx, posy, 10, 10, RED);
+
+    EndDrawing();
+
+    printf("%i, %i, %i, %i\n", x, posx, y, posy);
+
+    if(tiro)posx += vel;
+    else posx = x+100, posy = y+50;
+
+    if(posx >= 800){
+            posx = x+100, posy = y+50, tiro = 0;
+            tiro = 0;
+        }
+    }
+}
+```
